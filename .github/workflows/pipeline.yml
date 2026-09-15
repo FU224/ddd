@@ -1,19 +1,33 @@
-name: Pipeline
+name: Copy file
 
 on:
   push:
-  pull_request:
+    paths:
+      - '1111/pp.txt'
 
 jobs:
-  test:
+  copy-file:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check pp.txt
+      - name: Copy pp.txt to 2222
         run: |
-          test -f pp.txt
-          echo "pp.txt exists!"
-          cat pp.txt
+          mkdir -p 2222
+          cp 1111/pp.txt 2222/pp.txt
+
+      - name: Commit and push copied file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add 2222/pp.txt
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Copy pp.txt to 2222"
+            git push
+          fi
