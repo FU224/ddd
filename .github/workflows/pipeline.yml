@@ -1,0 +1,19 @@
+name: Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check pp.txt
+        run: |
+          test -f pp.txt
+          echo "pp.txt exists!"
+          cat pp.txt
